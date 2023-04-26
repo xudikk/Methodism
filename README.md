@@ -63,7 +63,7 @@ class YourClass(METHODIZM):
 ```
 
 ## [GitHub](https://github.com/xudoyberdi123/Methodism) Manba 
-
+## [PyPi](https://pypi.org/project/methodism/) Manba
 
 # Happy Time. Enjoy IT ;)
 
