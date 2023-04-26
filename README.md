@@ -3,7 +3,7 @@ Methodism sizga djangoda API larni tezroq yaratish va tez ishlatish imkoni berad
 ***Egamberdiyav Xudoyberdi Tomonidan Yaratilgan***
 
 ```python
-    pip install methodizm
+    pip install methodism
 ```
 ## About
 Ushbu Kutubxona Egamberdiyev Xudoyberdi Tomonidan yaratilgan bo'lib tog'ridan tog'ri django 
