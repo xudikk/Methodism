@@ -5,11 +5,13 @@
 #  Tashkent, Uzbekistan
 
 from rest_framework.authtoken.models import Token
-from base.costumizing import CustomGenericAPIView
-from base.decors import method_and_params_checker
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+
 from re import compile as re_compile
 
+from base.costumizing import CustomGenericAPIView
+from base.decors import method_and_params_checker
 from base.error_messages import MESSAGE
 from base.helper import custom_response, exception_data
 
@@ -45,7 +47,7 @@ class METHODIZM(CustomGenericAPIView):
         method = requests.data.get("method")
         params = requests.data.get("params")
         headers = requests.headers
-        if not self.authentication_classes and not self.permission_classes and method not in self.not_auth_methods:
+        if method not in self.not_auth_methods:
             authorization = headers.get(self.auth_headers, '')
             pattern = re_compile(self.token_key + r" (.+)")
 
