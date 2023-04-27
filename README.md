@@ -8,7 +8,7 @@ Methodism sizga djangoda API larni tezroq yaratish va tez ishlatish imkoni berad
 ## About
 Ushbu Kutubxona Egamberdiyev Xudoyberdi Tomonidan yaratilgan bo'lib tog'ridan tog'ri django 
 kutubxonasi ustiga qurulgan. Bu sizga API lar yozganda uni tez ishlatish va tezroq API yozish imkoni beradi.
-Avtomatik tarzda siz yozgan funksiyani method ga aylantigan holatda api hosil qiladi
+Avtomatik tarzda siz yozgan funksiyani method ga aylantirgan holatda api hosil qiladi
 
 ### filelar
 * ``base/costumizing.py``  ushbu file tayyor bir qator claslarni custum holarga o'tqazilgan varianti hisoblandi.  
@@ -31,7 +31,7 @@ Avtomatik tarzda siz yozgan funksiyani method ga aylantigan holatda api hosil qi
   pip install Django==4.2 django-rest-framework==0.1.0 djangorestframework==3.14.0
 ```  
 
-Yuklab olib bo'lgan O'zingizga  `views.py` faylida kerakli bo'lgan classni yozing va uni `urls.py` ga ulang,
+Yuklab olib bo'lgach O'zingizga  `views.py` faylida kerakli bo'lgan classni yozing va uni `urls.py` ga ulang,
 class ga esa `base/main.py` dagi `METHODIZM` classidan vorislik bering.  
 ### Example in `views.py`
 
@@ -58,7 +58,7 @@ class YourClass(METHODIZM):
         methodizm:
             salom.dunyo
         
-        siz yozgan har qanday ostki chiqili yoki funksiyalar nuqta orqali avtomatik ajratiladi!
+        siz yozgan har qanday ostki chiziqli yoki oddiy chiziqli funksiyalar nuqta orqali avtomatik ajratiladi!
         not_auth_methods = ['salom.dunyo']
      """
 ```
