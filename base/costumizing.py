@@ -10,7 +10,6 @@ from rest_framework.authentication import TokenAuthentication, get_authorization
 from rest_framework.generics import GenericAPIView
 
 from base.error_messages import MESSAGE
-from base.helper import custom_response
 from rest_framework import exceptions
 import base64, binascii
 
@@ -24,10 +23,10 @@ class CustomBasicAuthentication(BasicAuthentication):
             return None
 
         if len(auth) == 1:
-            msg = custom_response(False, message=MESSAGE['InvalidBasicHeader1'])
+            msg = self.response_funk(False, message=MESSAGE['InvalidBasicHeader1'])
             raise exceptions.AuthenticationFailed(msg)
         elif len(auth) > 2:
-            msg = custom_response(False, message=MESSAGE['InvalidBasicHeader2'])
+            msg = self.response_funk(False, message=MESSAGE['InvalidBasicHeader2'])
             raise exceptions.AuthenticationFailed(msg)
 
         try:
@@ -37,7 +36,7 @@ class CustomBasicAuthentication(BasicAuthentication):
                 auth_decoded = base64.b64decode(auth[1]).decode('latin-1')
             auth_parts = auth_decoded.partition(':')
         except (TypeError, UnicodeDecodeError, binascii.Error):
-            msg = custom_response(False, message=MESSAGE['InvalidBasicHeader3'])
+            msg = self.response_funk(False, message=MESSAGE['InvalidBasicHeader3'])
             raise exceptions.AuthenticationFailed(msg)
 
         userid, password = auth_parts[0], auth_parts[2]
@@ -51,10 +50,10 @@ class CustomBasicAuthentication(BasicAuthentication):
         user = authenticate(request=request, **credentials)
 
         if user is None:
-            raise exceptions.AuthenticationFailed(custom_response(False, message=MESSAGE['PasswordError']))
+            raise exceptions.AuthenticationFailed(self.response_funk(False, message=MESSAGE['UserPasswordError']))
 
         if not user.is_active:
-            raise exceptions.AuthenticationFailed(custom_response(False, message=MESSAGE['UserDeleted']))
+            raise exceptions.AuthenticationFailed(self.response_funk(False, message=MESSAGE['UserDeleted']))
 
         return (user, None)
 
@@ -65,7 +64,7 @@ class CustomBasicAuthentication(BasicAuthentication):
 class CustomGenericAPIView(GenericAPIView):
     def permission_denied(self, request, message=None, code=None):
         if request.authenticators and not request.successful_authenticator:
-            raise exceptions.NotAuthenticated(custom_response(False, message=MESSAGE['NotAuthenticated']))
+            raise exceptions.NotAuthenticated(self.response_funk(False, message=MESSAGE['NotAuthenticated']))
         raise exceptions.PermissionDenied(detail=MESSAGE['PermissionDenied'], code=code)
 
 
@@ -77,12 +76,12 @@ class BearerAuth(TokenAuthentication):
         try:
             token = model.objects.select_related('user').get(key=key)
         except model.DoesNotExist:
-            raise exceptions.AuthenticationFailed(custom_response(False, message=MESSAGE['Unauthenticated']))
+            raise exceptions.AuthenticationFailed(self.response_funk(False, message=MESSAGE['Unauthenticated']))
 
         if not token.user.is_active:
-            raise exceptions.AuthenticationFailed(custom_response(False, message=MESSAGE['UserNot']))
+            raise exceptions.AuthenticationFailed(self.response_funk(False, message=MESSAGE['UserNot']))
 
         if token.user.deleted:
-            raise exceptions.AuthenticationFailed(custom_response(False, message=MESSAGE['UserDeleted']))
+            raise exceptions.AuthenticationFailed(self.response_funk(False, message=MESSAGE['UserDeleted']))
 
         return super(BearerAuth, self).authenticate_credentials(key)

@@ -51,6 +51,7 @@ class YourClass(METHODIZM):
     token_class = Token
     not_auth_methods = [] # ro'yxatdan o'tish shart bo'lmagan kutubxonalarni qo'shib qo'ying
     
+    
     """ Misol uchun yozgan funksiyangiz:
         def salom_dunyo(requests, params):
             return "salom"

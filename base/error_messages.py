@@ -22,6 +22,11 @@ MESSAGE = {
         'ru': "Неверный пароль",
         'en': "Incorrect password",
     },
+    "UserPasswordError": {
+        'uz': "Username yoki parol noto'g'ri",
+        'ru': "Неверный пароль или username",
+        'en': "Incorrect password or username",
+    },
     "InvalidBasicHeader1": {
         'uz': "Basic headerda xatolik | Maʼlumotlar taqdim etilmaydi",
         'ru': "Неверный базовый заголовок | Учетные данные не предоставлены",
