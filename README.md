@@ -11,11 +11,11 @@ kutubxonasi ustiga qurulgan. Bu sizga API lar yozganda uni tez ishlatish va tezr
 Avtomatik tarzda siz yozgan funksiyani method ga aylantirgan holatda api hosil qiladi
 
 ### filelar
-* ``base/costumizing.py``  ushbu file tayyor bir qator claslarni custum holarga o'tqazilgan varianti hisoblandi.  
-* ``base/decors.py`` Ushbu file kerakli bo'lgan decoratorlarni yozish uchun ishlatiluvchi file.
-* ``base/error_messages.py`` bo'lishi mumkin bo'lgan xatoliklar yig'ilgan lug'at ko'rinishidagi file.   
-* ``base/helper.py`` Yordamchi funksiyalar joylangan file.   
-* ``base/main.py`` Asosiy class yozilgan file
+* ``methodism/costumizing.py``  ushbu file tayyor bir qator claslarni custum holarga o'tqazilgan varianti hisoblandi.  
+* ``methodism/decors.py`` Ushbu file kerakli bo'lgan decoratorlarni yozish uchun ishlatiluvchi file.
+* ``methodism/error_messages.py`` bo'lishi mumkin bo'lgan xatoliklar yig'ilgan lug'at ko'rinishidagi file.   
+* ``methodism/helper.py`` Yordamchi funksiyalar joylangan file.   
+* ``methodism/main.py`` Asosiy class yozilgan file
 
 
 
@@ -32,12 +32,12 @@ Avtomatik tarzda siz yozgan funksiyani method ga aylantirgan holatda api hosil q
 ```  
 
 Yuklab olib bo'lgach O'zingizga  `views.py` faylida kerakli bo'lgan classni yozing va uni `urls.py` ga ulang,
-class ga esa `base/main.py` dagi `METHODIZM` classidan vorislik bering.  
+class ga esa `methodism/main.py` dagi `METHODIZM` classidan vorislik bering.  
 ### Example in `views.py`
 
 
 ```python
-from base.main import METHODIZM
+from methodism.main import METHODIZM
 
 # agar bundan foydalansangiz settings.INSTALLED_APPS ga 'rest_framework.authtoken' ni qo'shib qo'ying
 from rest_framework.authtoken.models import Token 

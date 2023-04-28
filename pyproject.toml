@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "methodism"
-version = "0.0.6"
+version = "0.0.61"
 authors = [
   { name="xudikk", email="xudikk.1@gmail.com" },
 ]

@@ -6,8 +6,8 @@
 
 from rest_framework.response import Response
 
-from base.error_messages import MESSAGE
-from base.helper import custom_response
+from methodism.error_messages import MESSAGE
+from methodism.helper import custom_response
 
 
 # asosiy decorator
