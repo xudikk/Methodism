@@ -7,6 +7,7 @@ import binascii
 import os
 import base64
 from django.conf import settings
+from collections import namedtuple
 
 
 # natijalarni custom Holatda chiqaradi
@@ -25,7 +26,7 @@ def custom_response(status, data=None, message=None, method=None):
 # xatolikni ushash uchun funksiya
 def exception_data(e):
     return {
-        "value": str(e.__str__()),
+        "value": f"""{str(type(e)).strip("<class '").strip("'>")} => {str(e.__str__())}""",
         "line": str(e.__traceback__.tb_lineno),
         "frame": str(e.__traceback__.tb_frame),
     }
@@ -47,3 +48,29 @@ def code_decoder(code, decode=False, l=1):
             code = base64.b64encode(str(code).encode()).decode()
         return code
 
+
+# for SQL Methodism
+
+def namedtuplefetchall(cursor):
+    "cursordan kelayotgan tablitsa ichidagi barcha qatorlarni namedtuple ko'rinishida qaytaradi"
+    desc = cursor.description
+    nt_result = namedtuple('Result', [col[0] for col in desc])
+    return [nt_result(*row) for row in cursor.fetchall()]
+
+
+def dictfetchall(cursor):
+    "cursordan kelayotgan tablitsa ichidagi barcha qatorlarni dict ko'rinishida qaytaradi"
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
+
+
+def dictfetchone(cursor):
+    "cursordan kelayotgan tablitsa ichidagi bitta qatorni dict ko'rinishida qaytaradi"
+    row = cursor.fetchone()
+    if row is None:
+        return False
+    columns = [col[0] for col in cursor.description]
+    return dict(zip(columns, row))

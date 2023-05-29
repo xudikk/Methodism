@@ -16,8 +16,8 @@ def method_and_params_checker(funk):
         params = req.data.get('params')
         method = req.data.get("method")
         response = {
-            not method: Response(custom_response(status=False, message=MESSAGE['MethodMust'])),
-            params is None: Response(custom_response(status=False, message=MESSAGE['ParamsMust']))
+            not method: Response(custom_response(status=False, method=method, message=MESSAGE['MethodMust'])),
+            params is None: Response(custom_response(status=False, method=method, message=MESSAGE['ParamsMust']))
 
         }
         return response.get(True) or funk(self, req, *args, **kwargs)

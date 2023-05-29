@@ -3,7 +3,9 @@
 #  Please contact before making any changes
 #
 #  Tashkent, Uzbekistan
+from contextlib import closing
 
+from django.db import connections
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -13,10 +15,10 @@ from re import compile as re_compile
 from methodism.costumizing import CustomGenericAPIView
 from methodism.decors import method_and_params_checker
 from methodism.error_messages import MESSAGE
-from methodism.helper import custom_response, exception_data
+from methodism.helper import custom_response, exception_data, dictfetchone, dictfetchall
 
 
-class METHODIZM(CustomGenericAPIView):
+class METHODISM(CustomGenericAPIView):
     """
                         Main Class | METHODIZM
     file -> Asosiy funksiyalar joylashgan fileni ko'rsating
@@ -69,6 +71,59 @@ class METHODIZM(CustomGenericAPIView):
         try:
             response = Response(list(res)[0])
             response.data.update({'method': method})
+        except Exception as e:
+            response = Response(custom_response(False, method=method, message=MESSAGE['UndefinedError'],
+                                                data=exception_data(e)))
+        return response
+
+
+class SqlAPIMethodism(CustomGenericAPIView):
+    file = "__main__"
+    token_key = "Bearer"
+    auth_headers = 'Authorization'
+    token_class = Token
+    not_auth_methods = []  # def hello_world() => hello.world
+
+    @method_and_params_checker
+    def post(self, requests, *args, **kwargs):
+        method = requests.data.get("method")
+        params = requests.data.get("params")
+        headers = requests.headers
+        if method not in self.not_auth_methods:
+            authorization = headers.get(self.auth_headers, '')
+            pattern = re_compile(self.token_key + r" (.+)")
+
+            if not pattern.match(authorization):
+                return Response(custom_response(status=False, method=method, message=MESSAGE['NotAuthenticated']))
+            input_token = pattern.findall(authorization)[0]
+
+            # Authorize
+            token = self.token_class.objects.filter(key=input_token).first()
+            if not token:
+                return Response(custom_response(status=False, method=method, message=MESSAGE['AuthToken']))
+            requests.user = token.user
+        try:
+            funk = getattr(self.file, method.replace('.', '_').replace('-', '_'))
+        except AttributeError:
+            return Response(custom_response(False, method=method, message=MESSAGE['MethodDoesNotExist']))
+        except Exception as e:
+            return Response(custom_response(False, method=method, message=MESSAGE['UndefinedError'],
+                                            data=exception_data(e)))
+        funk = map(funk, [requests], [params])
+
+        # sql code larini ishlatish uchun!
+        try:
+            sql = list(funk)[0]
+            with closing(connections.cursor()) as cursor:
+                try:
+                    cursor.execute(sql[0])
+                    result = dictfetchone(cursor) if sql[1] else dictfetchall(cursor)
+                    response = Response(result)
+                except Exception as e:
+                    response = Response(custom_response(False, method=method, message=MESSAGE['UndefinedError'],
+                                                        data=exception_data(e)))
+            response.data.update({'method': method})
+
         except Exception as e:
             response = Response(custom_response(False, method=method, message=MESSAGE['UndefinedError'],
                                                 data=exception_data(e)))
