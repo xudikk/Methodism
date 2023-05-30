@@ -2,7 +2,7 @@
 Methodism sizga djangoda API larni tezroq yaratish va tez ishlatish imkoni beradi.  
 ***Egamberdiyav Xudoyberdi Tomonidan Yaratilgan***
 
-```python
+```
     pip install methodism
 ```
 ## About
@@ -37,13 +37,13 @@ class ga esa `methodism/main.py` dagi `METHODIZM` classidan vorislik bering.
 
 
 ```python
-from methodism.main import METHODIZM
+from methodism.main import METHODISM
 
 # agar bundan foydalansangiz settings.INSTALLED_APPS ga 'rest_framework.authtoken' ni qo'shib qo'ying
 from rest_framework.authtoken.models import Token 
 
 
-class YourClass(METHODIZM):
+class YourClass(METHODISM):
 
     file = '__main__'
     token_key = "Bearer"
@@ -62,10 +62,47 @@ class YourClass(METHODIZM):
         not_auth_methods = ['salom.dunyo']
      """
 ```
+# Navbatdagi class SqlAPIMethodism
+
+```python
+from methodism.main import SqlAPIMethodism
+
+# agar bundan foydalansangiz settings.INSTALLED_APPS ga 'rest_framework.authtoken' ni qo'shib qo'ying
+from rest_framework.authtoken.models import Token 
+# import your funksitions located file
+
+class YourClass(SqlAPIMethodism):
+
+    file = "__main__"  # funksiyalar joylashgan fileni hech qanday qo'shimchalarsiz tanishitiring
+    token_key = "Bearer"
+    auth_headers = "Authorization"
+    token_class = Token
+    not_auth_methods = [] # ro'yxatdan o'tish shart bo'lmagan kutubxonalarni qo'shib qo'ying
+    
+    
+    """ Misol uchun yozgan funksiyangiz:
+        def sizni_funksiyangiz(request, params):
+            return "select columns from your_table", True  # natija bitta bo'sa True ko'p bo'lsa False Qo'yiladi      
+        
+        siz yozgan har qanday ostki chiziqli yoki oddiy chiziqli funksiyalar nuqta orqali avtomatik ajratiladi!
+        not_auth_methods = ['sizni.funksiyangiz']
+     """
+
+```
+
+### funksiya taxmianan shunaqa yozilishi shart!
+```python
+def funk(request, params):
+    return "select colums from your_table", False
+# sql zaprosga istalgancha uzunlik mumkin, funk 2ta qiymat strda->sql va ikkinchisi Bool typiga ega bo'lishi kerak
+# True -> agar natija bitta bo'lsa
+# False -> agar natija bittadan ko'p bo'lsa
+```
 
 ## [GitHub](https://github.com/xudikk/Methodism) Manba 
 ## [PyPi](https://pypi.org/project/methodism/) Manba
 
 # Happy Time. Enjoy IT ;)
 
+###### if you can't understand contact with [programmer](https://t.me/xudikk)
 

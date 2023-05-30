@@ -5,10 +5,9 @@
 #  Tashkent, Uzbekistan
 from contextlib import closing
 
-from django.db import connections
+from django.db import connection
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
 
 from re import compile as re_compile
 
@@ -21,7 +20,7 @@ from methodism.helper import custom_response, exception_data, dictfetchone, dict
 class METHODISM(CustomGenericAPIView):
     """
                         Main Class | METHODIZM
-    file -> Asosiy funksiyalar joylashgan fileni ko'rsating
+    file -> Asosiy funksiyalar joylashgan fileni ko'rsating, E.X: from qayer import file_nom, file=file_nom
     token_key -> Token Secret kalitini ko'rsating (default=Bearer)
     auth_headers -> API headersda ushlab olinishi kerak bo'lgan kalitni ko'rsating (default=Authorization)
     token_class -> Ro'yxatdan o'tganligini ko'rsatuvchi classni ko'rsating -> (default=Token)
@@ -78,6 +77,27 @@ class METHODISM(CustomGenericAPIView):
 
 
 class SqlAPIMethodism(CustomGenericAPIView):
+    """
+                            Main Class | METHODIZM
+        file -> Asosiy funksiyalar joylashgan fileni ko'rsating, E.X: from qayer import file_nom, file=file_nom
+        token_key -> Token Secret kalitini ko'rsating (default=Bearer)
+        auth_headers -> API headersda ushlab olinishi kerak bo'lgan kalitni ko'rsating (default=Authorization)
+        token_class -> Ro'yxatdan o'tganligini ko'rsatuvchi classni ko'rsating -> (default=Token)
+        not_auth_methods -> Ro'yxatdan o'tish talab qilinmaydigan funksiyalarni ko'rsating | list ko'rinishida
+
+        Methodism sql zaproslarni spiga aylantirib beruvchi class!
+
+        EXP:
+            def your_funk(request, params):
+                # return "sql zapros"
+                return "select colums from your_table", True  # True-returns one, False-returns many
+
+
+        in methodism your_funk == your.funk
+
+        DIQQAT !!!  BearerAuth yoki TokenAuthentication classlaridan foydalanish mumkin emas!!!
+        """
+
     file = "__main__"
     token_key = "Bearer"
     auth_headers = 'Authorization'
@@ -114,11 +134,11 @@ class SqlAPIMethodism(CustomGenericAPIView):
         # sql code larini ishlatish uchun!
         try:
             sql = list(funk)[0]
-            with closing(connections.cursor()) as cursor:
+            with closing(connection.cursor()) as cursor:
                 try:
                     cursor.execute(sql[0])
                     result = dictfetchone(cursor) if sql[1] else dictfetchall(cursor)
-                    response = Response(result)
+                    response = Response(custom_response(True, data=result))
                 except Exception as e:
                     response = Response(custom_response(False, method=method, message=MESSAGE['UndefinedError'],
                                                         data=exception_data(e)))
