@@ -97,6 +97,12 @@ def funk(request, params):
 # sql zaprosga istalgancha uzunlik mumkin, funk 2ta qiymat strda->sql va ikkinchisi Bool typiga ega bo'lishi kerak
 # True -> agar natija bitta bo'lsa
 # False -> agar natija bittadan ko'p bo'lsa
+
+# AGARDA XATOLIK QAYTARMOQCHI BO'LINSA
+
+def funk(request, params):
+    return {"error": "xatolik"}  # xatolikni chiqarish uchun list yoki dict formatlaridan foydalananing!!
+
 ```
 
 ## [GitHub](https://github.com/xudikk/Methodism) Manba 

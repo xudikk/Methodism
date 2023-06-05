@@ -96,6 +96,8 @@ class SqlAPIMethodism(CustomGenericAPIView):
         in methodism your_funk == your.funk
 
         DIQQAT !!!  BearerAuth yoki TokenAuthentication classlaridan foydalanish mumkin emas!!!
+
+
         """
 
     file = "__main__"
@@ -134,6 +136,8 @@ class SqlAPIMethodism(CustomGenericAPIView):
         # sql code larini ishlatish uchun!
         try:
             sql = list(funk)[0]
+            if sql is not tuple:
+                return Response(sql)
             with closing(connection.cursor()) as cursor:
                 try:
                     cursor.execute(sql[0])
