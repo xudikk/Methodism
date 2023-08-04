@@ -46,7 +46,7 @@ class METHODISM(CustomGenericAPIView):
         method = requests.data.get("method")
         params = requests.data.get("params")
         headers = requests.headers
-        if method not in self.not_auth_methods:
+        if method not in self.not_auth_methods and "*" not in self.not_auth_methods:
             authorization = headers.get(self.auth_headers, '')
             pattern = re_compile(self.token_key + r" (.+)")
 
