@@ -16,7 +16,8 @@ Avtomatik tarzda siz yozgan funksiyani method ga aylantirgan holatda api hosil q
 * ``methodism/error_messages.py`` bo'lishi mumkin bo'lgan xatoliklar yig'ilgan lug'at ko'rinishidagi file.   
 * ``methodism/helper.py`` Yordamchi funksiyalar joylangan file.   
 * ``methodism/main.py`` Asosiy class yozilgan file
-
+* ``methodism/models.py`` Kerakli bo'lishi mumkin bo'lgan modellar to'plami
+* ``methodism/paginator.py`` va ``methodism/sqlpaginator.py`` Ushbu fayllar bizga paginatsiya hosil qilishda yordam beradi
 
 
 ## Ishlatish ketma ketligi
@@ -32,7 +33,7 @@ Avtomatik tarzda siz yozgan funksiyani method ga aylantirgan holatda api hosil q
 ```  
 
 Yuklab olib bo'lgach O'zingizga  `views.py` faylida kerakli bo'lgan classni yozing va uni `urls.py` ga ulang,
-class ga esa `methodism/main.py` dagi `METHODIZM` classidan vorislik bering.  
+class ga esa `methodism/main.py` dagi `METHODISM` classidan vorislik bering.  
 ### Example in `views.py`
 
 
@@ -55,7 +56,7 @@ class YourClass(METHODISM):
     """ Misol uchun yozgan funksiyangiz:
         def salom_dunyo(requests, params):
             return "salom"
-        methodizm:
+        methodism:
             salom.dunyo
         
         siz yozgan har qanday ostki chiziqli yoki oddiy chiziqli funksiyalar nuqta orqali avtomatik ajratiladi!

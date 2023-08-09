@@ -74,3 +74,18 @@ def dictfetchone(cursor):
         return False
     columns = [col[0] for col in cursor.description]
     return dict(zip(columns, row))
+
+
+def _auto_dict(data=None, model=True, **kwargs):
+    lst = []
+    if model:
+        for i in data.__dir__():
+            if i == "_state" or i == "id" or i == 'user':
+                continue
+            elif i == "__module__" or i == "_password":
+                break
+            lst.append(
+                (f"{i}", data.__getattribute__(i))
+            )
+    lst.extend(kwargs.items())
+    return dict(lst)

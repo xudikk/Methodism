@@ -98,7 +98,7 @@ class SqlAPIMethodism(CustomGenericAPIView):
         DIQQAT !!!  BearerAuth yoki TokenAuthentication classlaridan foydalanish mumkin emas!!!
 
 
-        """
+    """
 
     file = "__main__"
     token_key = "Bearer"
