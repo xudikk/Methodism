@@ -46,3 +46,6 @@ class Token(authtoken.Token):
         if not self.key:
             self.key = generate_key(100)
         return super(Token, self).save(*args, **kwargs)
+
+    class Meta:
+        abstract = True
