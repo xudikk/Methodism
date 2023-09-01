@@ -11,13 +11,14 @@ from collections import namedtuple
 
 
 # natijalarni custom Holatda chiqaradi
-def custom_response(status, data=None, message=None, method=None):
+def custom_response(status, data=None, message=None, method=None, status_code=200):
     if type(status) is not bool:
         status = False
     return {
         "Origin": settings.APP_NAME,
         "method": method,
         "status": status,
+        "status_code": status_code,
         "data": data,
         "message": message
     }
@@ -89,3 +90,10 @@ def _auto_dict(data=None, model=True, **kwargs):
             )
     lst.extend(kwargs.items())
     return dict(lst)
+
+
+# DIQQAT: agarda userda lang(CharField) bo'lmasa bu funksiyani ishlatmang!!!
+def lang_helper(request):
+    if not request.user.is_anonymous:
+        return request.user.lang
+    return 'en'
