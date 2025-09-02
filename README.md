@@ -1,4 +1,4 @@
-# Methodism
+# <span style="color: magenta;">Methodism</span>
 Methodism sizga djangoda API larni tezroq yaratish va tez ishlatish imkoni beradi.  
 ***Egamberdiyav Xudoyberdi Tomonidan Yaratilgan***
 
@@ -36,7 +36,6 @@ Yuklab olib bo'lgach O'zingizga  `views.py` faylida kerakli bo'lgan classni yozi
 class ga esa `methodism/main.py` dagi `METHODISM` classidan vorislik bering.  
 ### Example in `views.py`
 
-
 ```python
 from methodism.main import METHODISM
 
@@ -47,6 +46,7 @@ from rest_framework.authtoken.models import Token
 class YourClass(METHODISM):
 
     file = '__main__'
+    get_methods = "__main__"  # faqat get methodlari uchun
     token_key = "Bearer"
     auth_headers = "Authorization"
     token_class = Token
@@ -75,6 +75,7 @@ from rest_framework.authtoken.models import Token
 class YourClass(SqlAPIMethodism):
 
     file = "__main__"  # funksiyalar joylashgan fileni hech qanday qo'shimchalarsiz tanishitiring
+    get_methods = "__main__"  # faqat get methodlari uchun
     token_key = "Bearer"
     auth_headers = "Authorization"
     token_class = Token
@@ -95,19 +96,30 @@ class YourClass(SqlAPIMethodism):
 ```python
 def funk(request, params):
     return "select colums from your_table", False
+
 # sql zaprosga istalgancha uzunlik mumkin, funk 2ta qiymat strda->sql va ikkinchisi Bool typiga ega bo'lishi kerak
 # True -> agar natija bitta bo'lsa
 # False -> agar natija bittadan ko'p bo'lsa
 
 # AGARDA XATOLIK QAYTARMOQCHI BO'LINSA
 
+# post funksiya
 def funk(request, params):
     return {"error": "xatolik"}  # xatolikni chiqarish uchun list yoki dict formatlaridan foydalananing!!
 
+# DIQQAT: GET zaprosi uchun funksiya yozilganda Params kirib kelmaydi
+
 ```
 
-## [GitHub](https://github.com/xudikk/Methodism) Manba 
-## [PyPi](https://pypi.org/project/methodism/) Manba
+## <span style="color: orange;">Qo'shimcha ishlatishga oid qoidalarni Methodism Asosiy funksiyasigaa kiritilgan documentatsiyadan ham o'rganib olish mumkin</span>
+
+---
+
+## <span style='color: magenta;'> Kod Manbalari</span>
+   * ### [GitHub](https://github.com/xudikk/Methodism)  
+   * ### [PyPi](https://pypi.org/project/methodism/) 
+
+ <span style="color: blue;">Methodism Barcha uchun ochiq kutubxona. Kodlari va yoki qo'shimcha ma'lumotlarni bemalol githubdan yoki dasturchining o'zidan so'rab o'rganib olishingiz mumkin</span>
 
 # Happy Time. Enjoy IT ;)
 

@@ -51,7 +51,6 @@ def code_decoder(code, decode=False, l=1):
 
 
 # for SQL Methodism
-
 def namedtuplefetchall(cursor):
     "cursordan kelayotgan tablitsa ichidagi barcha qatorlarni namedtuple ko'rinishida qaytaradi"
     desc = cursor.description
@@ -78,6 +77,7 @@ def dictfetchone(cursor):
 
 
 def _auto_dict(data=None, model=True, **kwargs):
+    "Kirib kelgan QuerySet objectini avtomatik tarzda dictga o'girib beradi"
     lst = []
     if model:
         for i in data.__dir__():
@@ -92,8 +92,12 @@ def _auto_dict(data=None, model=True, **kwargs):
     return dict(lst)
 
 
-# DIQQAT: agarda userda lang(CharField) bo'lmasa bu funksiyani ishlatmang!!!
 def lang_helper(request):
+    """
+    DIQQAT: agarda userda lang(CharField) bo'lmasa bu funksiyani ishlatmang!!!
+    :param request: WSGI objects
+    :return: str
+    """
     if not request.user.is_anonymous:
         return request.user.lang
     return 'en'

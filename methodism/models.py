@@ -1,7 +1,9 @@
 from django.db import models
-from django.db.models import JSONField
 from django.utils.translation import gettext_lazy as _
 from rest_framework.authtoken import models as authtoken
+from datetime import timedelta, datetime
+from django.conf import settings
+from django.utils import timezone
 
 
 from methodism import generate_key
@@ -9,21 +11,33 @@ from methodism import generate_key
 
 class Otp(models.Model):
     key = models.CharField(max_length=512, unique=True)
+
     is_expired = models.BooleanField(default=False)
-    tries = models.SmallIntegerField(default=0)
-    extra = JSONField(default={})
     is_verified = models.BooleanField(default=False)
+
+    tries = models.SmallIntegerField(default=0)
+    extra = models.JSONField(default=dict)
     step = models.CharField(max_length=25, null=True)
-    by = models.IntegerField(choices=[
+    by = models.SmallIntegerField(choices=[
         (1, "By Register"),
         (2, "By Login"),
-    ])
+    ], default=1)
 
     created = models.DateTimeField(auto_now=False, auto_now_add=True, editable=False)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     mobile = False
     email = False
+
+    def check_time_limit(self, time_limit=3):
+        """
+            created vaqtidan time_limit(3) daqiqa o'tgan yoki o'tmaganligini tekshiradi.
+            Agar 3 daqiqa o'tmagan bo'lsa True, aks holda False qaytaradi.
+            USE_TZ=True yoki False bo'lishidan qat'iy nazar ishlaydi.
+        """
+        three_minutes_later = self.created + timedelta(minutes=time_limit)
+        current_time = timezone.now() if settings.USE_TZ else datetime.now()
+        return current_time <= three_minutes_later
 
     def save(self, *args, **kwargs):
         if self.tries >= 3:
