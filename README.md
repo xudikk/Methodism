@@ -2,9 +2,27 @@
 Methodism sizga djangoda API larni tezroq yaratish va tez ishlatish imkoni beradi.  
 ***Egamberdiyav Xudoyberdi Tomonidan Yaratilgan***
 
+# O'rnatish uchun qo'llanma 
+1. Virtual muhit yarating va faollashtiring:
+   
+``` 
+    python -m venv venv
+   # Windows: venv\Scripts\activate
+   # Linux/Mac: source venv/bin/activate
 ```
+3. Pip va setuptools ni yangilang (muhim!):
+```
+     python -m pip install --upgrade pip setuptools wheel
+```
+3. Methodism ni o'rnating:
+```bash
     pip install methodism
 ```
+Agar Python 3.12+ da muammo bo'lsa, `--no-build-isolation` flagini qo'shing:
+```bash
+    pip install methodism --no-build-isolation
+```
+
 ## About
 Ushbu Kutubxona Egamberdiyev Xudoyberdi Tomonidan yaratilgan bo'lib tog'ridan tog'ri django 
 kutubxonasi ustiga qurulgan. Bu sizga API lar yozganda uni tez ishlatish va tezroq API yozish imkoni beradi.
