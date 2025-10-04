@@ -214,8 +214,8 @@ class SqlAPIMethodism(CustomGenericAPIView):
         # sql code larini ishlatish uchun!
         try:
             sql = list(funk)[0]
-            if isinstance(sql, tuple):
-                return Response(sql)
+            if not isinstance(sql, tuple):
+                return Response(custom_response(True, data=sql))
             with closing(connection.cursor()) as cursor:
                 try:
                     cursor.execute(sql[0])
@@ -265,8 +265,8 @@ class SqlAPIMethodism(CustomGenericAPIView):
         # sql code larini ishlatish uchun!
         try:
             sql = list(funk)[0]
-            if isinstance(sql, tuple):
-                return Response(sql)
+            if not isinstance(sql, tuple):
+                return Response(custom_response(True, data=sql))
             with closing(connection.cursor()) as cursor:
                 try:
                     cursor.execute(sql[0])
