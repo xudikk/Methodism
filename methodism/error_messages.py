@@ -49,8 +49,8 @@ MESSAGE = {
     },
     "TokenUnUsable": {
         'uz': "Yaroqsiz Token",
-        'ru': "Yaroqsiz Token",
-        'en': "Yaroqsiz Token",
+        'ru': "Недействительный токен",
+        'en': "Invalid token",
     },
     "user_not": {
         'uz': "Foydalanuvchi topilmadi",
@@ -59,8 +59,8 @@ MESSAGE = {
     },
     "AuthToken": {
         'uz': "Token aniqlanmadi",
-        'ru': "Token aniqlanmadi",
-        'en': "Token aniqlanmadi",
+        'ru': "Токен не найден",
+        'en': "Token not found",
     },
     "PasswordChanged": {
         'uz': "Parol muaffaqiyatli o'zgartirildi",
@@ -70,12 +70,12 @@ MESSAGE = {
 
     "PasswordMust": {
         'uz': f"< password > to'ldirishili shart",
-        'ru': f"< password > to'ldirishili shart",
+        'ru': f"< password > должен быть заполнен",
         'en': f"< password > must be filled",
     },
     "ErrorMethod": {
         "uz": "Method xato",
-        "ru": "Method xato",
+        "ru": "Неверный метод",
         "en": "Invalid Method",
     },
     "NotData": {
@@ -116,7 +116,7 @@ MESSAGE = {
     "UserSuccessDeleted": {
         'uz': "User muvoffaqiyatli o'chirib tashlandi",
         'en': "User deleted successfully",
-        "ru": "User успешно удалена"
+        "ru": "Пользователь успешно удален"
     },
     "TokenMust": {
         'uz': f"token to'ldirishili shart",
@@ -157,12 +157,31 @@ MESSAGE = {
         'en': "User Not Found",
 
     },
+    "TokenExpired": {
+        'uz': "Token muddati tugagan",
+        'ru': "Срок действия токена истёк",
+        'en': "Token has expired",
+    },
+    "UserNotActive": {
+        'uz': "Foydalanuvchi faol emas",
+        'ru': "Пользователь не активен",
+        'en': "User is not active",
+    },
+    "ParamsMustDict": {
+        "uz": "< params > dict(object) ko'rinishida bo'lishi kerak",
+        "ru": "< params > должен быть в виде словаря(object)",
+        "en": "< params > must be in dict(object) form"
+    },
+    "InvalidBody": {
+        "uz": "So'rov tanasi (body) JSON object ko'rinishida bo'lishi kerak",
+        "ru": "Тело запроса должно быть JSON объектом",
+        "en": "Request body must be a JSON object"
+    },
     'MethodDoesNotExist': {
         'uz': f"Bunday method topilmadi",
         'ru': f"Такой метод не найден",
         'en': f"No such method found",
     },
-
 }
 
 
