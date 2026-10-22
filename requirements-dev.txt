@@ -1,0 +1,4 @@
+-r requirements.txt
+pytest>=8
+pytest-django>=4.8
+build

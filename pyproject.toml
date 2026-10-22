@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=65.6.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "methodism"
+dynamic = ["version"]
+authors = [
+  {name = "xudikk", email = "xudikk.1@gmail.com"},
+]
+description = "Help to build APIs Faster"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.2",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "Django>=4.2",
+    "djangorestframework>=3.14",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-django>=4.8", "build"]
+
+[project.urls]
+"Homepage" = "https://github.com/xudikk/Methodism"
+"PyPI" = "https://pypi.org/project/methodism/"
+
+[tool.setuptools]
+packages = ["methodism"]
+
+[tool.setuptools.dynamic]
+version = {attr = "methodism.__version__"}
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+pythonpath = ["."]
+testpaths = ["tests"]

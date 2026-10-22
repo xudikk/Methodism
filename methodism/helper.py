@@ -6,8 +6,12 @@
 import binascii
 import os
 import base64
+import traceback
 from django.conf import settings
 from collections import namedtuple
+
+LANGUAGES = ('uz', 'ru', 'en')
+DEFAULT_LANG = 'en'
 
 
 # natijalarni custom Holatda chiqaradi
@@ -15,7 +19,7 @@ def custom_response(status, data=None, message=None, method=None, status_code=20
     if type(status) is not bool:
         status = False
     return {
-        "Origin": settings.APP_NAME,
+        "Origin": getattr(settings, 'APP_NAME', 'Methodism'),
         "method": method,
         "status": status,
         "status_code": status_code,
@@ -26,10 +30,18 @@ def custom_response(status, data=None, message=None, method=None, status_code=20
 
 # xatolikni ushash uchun funksiya
 def exception_data(e):
+    exc_type = type(e)
+    name = exc_type.__qualname__
+    if exc_type.__module__ not in ('builtins', '__main__'):
+        name = f"{exc_type.__module__}.{name}"
+
+    # xatolik aynan qaysi qatorda yuz berganini ko'rsatish uchun eng ichki frame olinadi
+    frames = traceback.extract_tb(e.__traceback__) if e.__traceback__ else []
+    last = frames[-1] if frames else None
     return {
-        "value": f"""{str(type(e)).strip("<class '").strip("'>")} => {str(e.__str__())}""",
-        "line": str(e.__traceback__.tb_lineno),
-        "frame": str(e.__traceback__.tb_frame),
+        "value": f"{name} => {e}",
+        "line": str(last.lineno) if last else None,
+        "frame": f"{last.filename}:{last.lineno} in {last.name}" if last else None,
     }
 
 
@@ -76,28 +88,54 @@ def dictfetchone(cursor):
     return dict(zip(columns, row))
 
 
-def _auto_dict(data=None, model=True, **kwargs):
-    "Kirib kelgan QuerySet objectini avtomatik tarzda dictga o'girib beradi"
-    lst = []
-    if model:
-        for i in data.__dir__():
-            if i == "_state" or i == "id" or i == 'user':
-                continue
-            elif i == "__module__" or i == "_password":
-                break
-            lst.append(
-                (f"{i}", data.__getattribute__(i))
-            )
-    lst.extend(kwargs.items())
-    return dict(lst)
-
-
-def lang_helper(request):
+def auto_dict(data=None, model=True, exclude=('id', 'user', 'password'), **kwargs):
     """
-    DIQQAT: agarda userda lang(CharField) bo'lmasa bu funksiyani ishlatmang!!!
+    Kirib kelgan model objectini avtomatik tarzda dictga o'girib beradi.
+    exclude -> chiqarilmasligi kerak bo'lgan maydonlar (password hech qachon chiqarilmaydi)
+    kwargs  -> natijaga qo'shimcha qo'shiladigan kalitlar
+    """
+    result = {}
+    if model and data is not None:
+        exclude = set(exclude) | {'password'}
+        for field in data._meta.concrete_fields:
+            if field.name in exclude or field.attname in exclude:
+                continue
+            result[field.attname] = getattr(data, field.attname)
+    result.update(kwargs)
+    return result
+
+
+# eski nom bilan ham ishlashi uchun
+_auto_dict = auto_dict
+
+
+def lang_helper(request, default=DEFAULT_LANG):
+    """
+    So'rov uchun tilni aniqlaydi:
+        1. user.lang (agar userda shunday maydon bo'lsa)
+        2. Accept-Language header
+        3. default ('en')
     :param request: WSGI objects
     :return: str
     """
-    if not request.user.is_anonymous:
-        return request.user.lang
-    return 'en'
+    user = getattr(request, 'user', None)
+    lang = getattr(user, 'lang', None) if user is not None and not user.is_anonymous else None
+    if lang in LANGUAGES:
+        return lang
+
+    header = request.headers.get('Accept-Language', '') if hasattr(request, 'headers') else ''
+    for part in header.split(','):
+        code = part.split(';')[0].strip()[:2].lower()
+        if code in LANGUAGES:
+            return code
+    return default
+
+
+def translate(message, lang=DEFAULT_LANG):
+    """
+    MESSAGE lug'atidagi {'uz': .., 'ru': .., 'en': ..} ko'rinishidagi xabardan kerakli tildagisini qaytaradi.
+    EXP: translate(MESSAGE['NotData'], lang_helper(request))
+    """
+    if isinstance(message, dict):
+        return message.get(lang) or message.get(DEFAULT_LANG) or next(iter(message.values()), None)
+    return message

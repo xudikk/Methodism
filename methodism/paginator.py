@@ -1,13 +1,15 @@
-import collections.abc
-import inspect
 import warnings
 from math import ceil
 from django.core.paginator import (PageNotAnInteger, EmptyPage, Page, UnorderedObjectListWarning)
 from django.utils.functional import cached_property
-from django.utils.inspect import method_has_no_args
 from django.utils.translation import gettext_lazy as _
 
+
 class sqlPaginator:
+    """
+    SQL orqali allaqachon kesib olingan (LIMIT/OFFSET) natijalar uchun Django Paginator analogi.
+    object_list -> joriy sahifadagi qatorlar, count -> umumiy qatorlar soni
+    """
 
     def __init__(self, object_list, count, per_page, orphans=0,
                  allow_empty_first_page=True):
@@ -51,10 +53,7 @@ class sqlPaginator:
     def page(self, number):
         """Return a Page object for the given 1-based page number."""
         number = self.validate_number(number)
-        bottom = (number - 1) * self.per_page
-        top = bottom + self.per_page
-        if top + self.orphans >= self.count:
-            top = self.count
+        # object_list SQL tomonidan allaqachon kesilgan, shuning uchun to'liq beriladi
         return self._get_page(self.object_list, number, self)
 
     def _get_page(self, *args, **kwargs):
@@ -65,16 +64,6 @@ class sqlPaginator:
         standard :cls:`Page` object.
         """
         return Page(*args, **kwargs)
-
-    # @cached_property
-    # def count(self):
-    #
-    #     """Return the total number of objects, across all pages."""
-    #     c = getattr(self.object_list, 'count', None)
-    #     print("count: ", c())
-    #     if callable(c) and not inspect.isbuiltin(c) and method_has_no_args(c):
-    #         return c()
-    #     return len(self.object_list)
 
     @cached_property
     def num_pages(self):
@@ -109,4 +98,3 @@ class sqlPaginator:
                 UnorderedObjectListWarning,
                 stacklevel=3
             )
-

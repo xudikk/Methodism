@@ -66,7 +66,8 @@ class CustomGenericAPIView(GenericAPIView):
     def permission_denied(self, request, message=None, code=None):
         if request.authenticators and not request.successful_authenticator:
             raise exceptions.NotAuthenticated(custom_response(False, message=MESSAGE['NotAuthenticated']))
-        raise exceptions.PermissionDenied(detail=MESSAGE['PermissionDenied'], code=code)
+        raise exceptions.PermissionDenied(detail=custom_response(False, message=MESSAGE['PermissionDenied']),
+                                          code=code)
 
 
 class BearerAuth(TokenAuthentication):
@@ -80,9 +81,10 @@ class BearerAuth(TokenAuthentication):
             raise exceptions.AuthenticationFailed(custom_response(False, message=MESSAGE['Unauthenticated']))
 
         if not token.user.is_active:
-            raise exceptions.AuthenticationFailed(custom_response(False, message=MESSAGE['UserNot']))
+            raise exceptions.AuthenticationFailed(custom_response(False, message=MESSAGE['UserNotActive']))
 
-        if token.user.deleted:
+        # user modelida "deleted" maydoni bo'lmasligi ham mumkin
+        if getattr(token.user, 'deleted', False):
             raise exceptions.AuthenticationFailed(custom_response(False, message=MESSAGE['UserDeleted']))
 
-        return super(BearerAuth, self).authenticate_credentials(key)
+        return token.user, token
