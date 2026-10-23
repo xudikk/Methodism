@@ -14,6 +14,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: pypi  # PyPI dagi trusted publisher sozlamasidagi environment nomi bilan bir xil bo'lishi kerak
 
     steps:
     - name: Checkout code
@@ -34,8 +35,6 @@ jobs:
 
     - name: Publish package to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1  # Yangi versiya (master o'rniga release/v1)
-      env:  # Bu qism trusted publishing uchun (API token kerak emas)
-        environment: pypi  # Quyida tushuntirilgan
       with:
         repository-url: https://upload.pypi.org/legacy/  # TestPyPI uchun https://test.pypi.org/legacy/ qo'ying
       # user va password ni olib tashlang – trusted publishing ishlatiladi

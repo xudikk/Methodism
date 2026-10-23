@@ -16,7 +16,10 @@
   chaqiruvlar uchun avtorizatsiya talab qilinardi. Endi barcha variantlar bir xil ishlaydi.
 * `SqlAPIMethodism` da `{"error": ...}` qaytarilganda `status: True` chiqardi.
 * `SqlPaginator` noto'g'ri `page` (masalan `"abc"`) berilganda yiqilardi.
-* PyPI ga chiqarish workflowi ishlamasdi: `pyproject.toml` `.gitignore` da edi.
+* PyPI ga chiqarish workflowi ishlamasdi: `pyproject.toml` `.gitignore` da edi, `environment: pypi`
+  esa `env` ichiga noto'g'ri yozilgan edi.
+* Eski `setup.cfg` olib tashlandi: u `pyproject.toml` bilan to'qnashib, paket metadata'siga
+  noto'g'ri (Apache) litsenziya va eski URL qo'shardi. `LICENSE` (MIT) fayli qo'shildi.
 * Rus/ingliz tarjimalari yo'q xabarlar to'ldirildi.
 
 ### Xavfsizlik
